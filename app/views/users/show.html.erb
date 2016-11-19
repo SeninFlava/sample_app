@@ -1,0 +1,52 @@
+<% provide(:title, @user.name) %>
+
+<% store_location %>
+<div class="row">
+  <aside class="span4">
+    <section>
+      <h1>
+        <%= gravatar_for @user %>
+        <%= @user.name %>
+      </h1>
+    </section>
+    <section>
+      <%= render 'shared/stats' %>
+    </section>
+    <section>
+        <%= @user.email %>
+      <% if @user.admin? %> <br/> 
+      <i>ADMIN</i> | 
+      <%= link_to "Remove admin role", @user, method: :set_admin, data: {confirm: "Remove administrator role from #{@user.name}?"} %>
+      <% end %>
+
+
+      <% if current_user.admin? && current_user != @user %>
+      <br/>
+      <%= link_to "delete", @user, method: :delete, data: {confirm: "Delete #{@user.name}?"} %>
+      <br/>
+
+        <% unless @user.admin? %>
+        <%= link_to "Set admin", @user, method: :set_admin, data: {confirm: "Set administrator role to #{@user.name}?"} %>
+        <% end %>
+        <br/>
+        <%= link_to "Edit", edit_user_path(@user) %>
+
+
+      <% end %>
+    </section>
+  </aside>
+
+  <div class="span8">
+    <%= render 'follow_form' if signed_in? %>
+    
+    <% if @user.microposts.any? %>
+      <h3>Microposts (<%= @user.microposts.count %>)</h3>
+      <ol class="microposts">
+        <%= render @microposts %>
+      </ol>
+      <%= will_paginate @microposts %>
+    <% end %>
+  </div>
+
+
+</div>

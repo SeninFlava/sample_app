@@ -1,0 +1,20 @@
+<li>
+	<%= gravatar_for user %>
+	<%= link_to user.name, user %> <br/> 
+	<%= user.email %> <br/> 
+	<b><%= user.id %></b> <br/>
+
+	<% if user.admin? %>
+		(ADMIN)<br/>
+	<% end %>
+
+	<% if current_user.admin? && !current_user?(user) %>
+		<%= link_to "delete", user, method: :delete, data: {confirm: "Delete #{user.name}?"} %> | 
+		<%= link_to "edit", edit_user_path(user)%>
+
+		<% unless user.admin? %>
+			 | <%= link_to "Set admin role", user, method: :set_admin  %>
+		<% end %>
+	
+	<% end %>
+</li>
